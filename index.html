@@ -1,10 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TSB AI Tools</title>
+  <title>TSB AI Marketing Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: #475569;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 12px 20px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #15803d;
+    }
+
+    .results {
+      margin-top: 24px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 18px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      border: 1px solid #cbd5e1;
+    }
+
+    .muted {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h1>TSB AI Tools Server Running</h1>
-  <p>Deployment successful.</p>
+  <div class="card">
+    <h1>YouTube SEO Generator</h1>
+    <p>Create YouTube titles, description, and tags using your TSB AI server.</p>
+
+    <label for="topic">Video Topic</label>
+    <input id="topic" type="text" placeholder="Example: Salt Lake City roofing tips for homeowners" />
+
+    <button onclick="generate()">Generate Video Content</button>
+
+    <div class="muted">This tool sends your prompt to your secure AI endpoint.</div>
+
+    <div id="results" class="results" style="display:none;"></div>
+  </div>
+
+  <script>
+    async function generate() {
+      const topic = document.getElementById("topic").value.trim();
+      const results = document.getElementById("results");
+
+      if (!topic) {
+        results.style.display = "block";
+        results.innerHTML = "Please enter a video topic first.";
+        return;
+      }
+
+      results.style.display = "block";
+      results.innerHTML = "Generating...";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: `Create a YouTube SEO package for this topic: ${topic}.
+
+Return:
+1. Three engaging YouTube titles
+2. One SEO-optimized video description
+3. Ten YouTube tags in a comma-separated list`
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          results.innerHTML = "Error: " + (data.error || "Something went wrong.");
+          return;
+        }
+
+        results.innerHTML = data.result || "No result returned.";
+      } catch (error) {
+        results.innerHTML = "Error: " + error.message;
+      }
+    }
+  </script>
 </body>
 </html>
