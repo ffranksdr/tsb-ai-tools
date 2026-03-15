@@ -37,7 +37,8 @@
       font-weight: 600;
     }
 
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       padding: 12px 14px;
       border: 1px solid #cbd5e1;
@@ -91,7 +92,11 @@
     <p>Create YouTube titles, description, and tags using your TSB AI server.</p>
 
     <label for="topic">Video Topic</label>
-    <input id="topic" type="text" placeholder="Example: Salt Lake City roofing tips for homeowners" />
+    <input
+      id="topic"
+      type="text"
+      placeholder="Example: Salt Lake City roofing tips for homeowners"
+    />
 
     <button onclick="generate()">Generate Video Content</button>
 
@@ -137,7 +142,7 @@ Return:
           return;
         }
 
-        results.innerHTML = data.result || "No result returned.";
+        results.innerHTML = data.result?.content || JSON.stringify(data, null, 2);
       } catch (error) {
         results.innerHTML = "Error: " + error.message;
       }
@@ -145,4 +150,3 @@ Return:
   </script>
 </body>
 </html>
-
