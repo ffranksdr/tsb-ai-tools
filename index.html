@@ -105,48 +105,53 @@
     <div id="results" class="results" style="display:none;"></div>
   </div>
 
-  <script>
-    async function generate() {
-      const topic = document.getElementById("topic").value.trim();
-      const results = document.getElementById("results");
+ <script>
+async function generate() {
+  const topic = document.getElementById("topic").value.trim();
+  const results = document.getElementById("results");
 
-      if (!topic) {
-        results.style.display = "block";
-        results.innerHTML = "Please enter a video topic first.";
-        return;
-      }
+  if (!topic) {
+    results.style.display = "block";
+    results.innerHTML = "Please enter a video topic first.";
+    return;
+  }
 
-      results.style.display = "block";
-      results.innerHTML = "Generating...";
+  results.style.display = "block";
+  results.innerHTML = "Generating...";
 
-      try {
-        const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            prompt: `Create a YouTube SEO package for this topic: ${topic}.
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: `Create a YouTube SEO package for this topic: ${topic}.
 
 Return:
 1. Three engaging YouTube titles
 2. One SEO-optimized video description
 3. Ten YouTube tags in a comma-separated list`
-          })
-        });
+      })
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (!response.ok) {
-          results.innerHTML = "Error: " + (data.error || "Something went wrong.");
-          return;
-        }
-
-        results.innerHTML = data.result?.content || JSON.stringify(data, null, 2);
-      } catch (error) {
-        results.innerHTML = "Error: " + error.message;
-      }
+    if (!response.ok) {
+      results.innerHTML = "Error: " + (data.error || "Something went wrong.");
+      return;
     }
-  </script>
+
+    results.innerHTML =
+      data.result?.content ||
+      data.result ||
+      data.content ||
+      JSON.stringify(data, null, 2);
+
+  } catch (error) {
+    results.innerHTML = "Error: " + error.message;
+  }
+}
+</script>
 </body>
 </html>
