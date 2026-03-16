@@ -38,7 +38,8 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 12px 14px;
       border: 1px solid #cbd5e1;
@@ -88,66 +89,89 @@
 </head>
 <body>
   <div class="card">
-    <h1>YouTube SEO Generator</h1>
-    <p>Create YouTube titles, description, and tags using your TSB AI server.</p>
+    <h1>TSB AI Marketing Toolkit</h1>
+    <p>Create marketing content using your TSB AI server.</p>
 
-    <label for="topic">Video Topic</label>
+    <label for="tool">Select Tool</label>
+    <select id="tool">
+      <option value="youtube">YouTube SEO Generator</option>
+      <option value="blog">Blog Post Generator</option>
+    </select>
+
+    <label for="topic">Topic</label>
     <input
       id="topic"
       type="text"
       placeholder="Example: Salt Lake City roofing tips for homeowners"
     />
 
-    <button onclick="generate()">Generate Video Content</button>
+    <button onclick="generate()">Generate Content</button>
 
     <div class="muted">This tool sends your prompt to your secure AI endpoint.</div>
 
     <div id="results" class="results" style="display:none;"></div>
   </div>
 
- <script>
-async function generate() {
-  const topic = document.getElementById("topic").value.trim();
-  const results = document.getElementById("results");
+  <script>
+    async function generate() {
+      const tool = document.getElementById("tool").value;
+      const topic = document.getElementById("topic").value.trim();
+      const results = document.getElementById("results");
 
-  if (!topic) {
-    results.style.display = "block";
-    results.innerHTML = "Please enter a video topic first.";
-    return;
-  }
+      if (!topic) {
+        results.style.display = "block";
+        results.innerHTML = "Please enter a topic first.";
+        return;
+      }
 
-  results.style.display = "block";
-  results.innerHTML = "Generating...";
+      let prompt = "";
 
-  try {
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        prompt: `Create a YouTube SEO package for this topic: ${topic}.
+      if (tool === "youtube") {
+        prompt = `Create a YouTube SEO package for this topic: ${topic}.
 
 Return:
 1. Three engaging YouTube titles
 2. One SEO-optimized video description
-3. Ten YouTube tags in a comma-separated list`
-      })
-    });
+3. Ten YouTube tags in a comma-separated list`;
+      }
 
-    const data = await response.json();
+      if (tool === "blog") {
+        prompt = `Write an SEO-optimized blog post about this topic: ${topic}.
 
-   results.innerHTML = JSON.stringify(data, null, 2);
-    results.innerHTML =
-      data.result?.content ||
-      data.result ||
-      data.content ||
-      JSON.stringify(data, null, 2);
+Return:
+1. A strong blog title
+2. An engaging introduction
+3. Clear section headings
+4. Helpful body content
+5. A persuasive call to action`;
+      }
 
-  } catch (error) {
-    results.innerHTML = "Error: " + error.message;
-  }
-}
-</script>
+      results.style.display = "block";
+      results.innerHTML = "Generating...";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: prompt
+          })
+        });
+
+        const data = await response.json();
+
+        results.innerHTML =
+          data.result?.content ||
+          data.result ||
+          data.content ||
+          JSON.stringify(data, null, 2);
+
+      } catch (error) {
+        results.innerHTML = "Error: " + error.message;
+      }
+    }
+  </script>
 </body>
 </html>
