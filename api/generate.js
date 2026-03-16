@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      result: data.output_text || JSON.stringify(data, null, 2)
+      result: data.output?.[0]?.content?.[0]?.text || JSON.stringify(data, null, 2)
     });
 
   } catch (error) {
