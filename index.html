@@ -137,11 +137,7 @@ Return:
 
     const data = await response.json();
 
-    if (!response.ok) {
-      results.innerHTML = "Error: " + (data.error || "Something went wrong.");
-      return;
-    }
-
+   results.innerHTML = JSON.stringify(data, null, 2);
     results.innerHTML =
       data.result?.content ||
       data.result ||
