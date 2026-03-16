@@ -70,6 +70,15 @@
       background: #15803d;
     }
 
+    .secondary-btn {
+      background: #0f172a;
+      margin-left: 10px;
+    }
+
+    .secondary-btn:hover {
+      background: #1e293b;
+    }
+
     .results {
       margin-top: 24px;
       background: #f1f5f9;
@@ -109,6 +118,9 @@
     />
 
     <button onclick="generate()">Generate Content</button>
+    <button id="copyBtn" class="secondary-btn" onclick="copyResults()" style="display:none;">
+      Copy Results
+    </button>
 
     <div class="muted">This tool sends your prompt to your secure AI endpoint.</div>
 
@@ -120,17 +132,26 @@
       const tool = document.getElementById("tool").value;
       const topic = document.getElementById("topic").value.trim();
       const results = document.getElementById("results");
+      const copyBtn = document.getElementById("copyBtn");
 
       if (!topic) {
         results.style.display = "block";
         results.innerHTML = "Please enter a topic first.";
+        copyBtn.style.display = "none";
         return;
       }
 
       let prompt = "";
+      const baseInstruction = `You are an expert digital marketing strategist helping small local businesses grow online.
+
+Write clear, practical marketing content that a small business owner can immediately use.
+Use current marketing best practices and evergreen SEO principles.
+Do not include specific years such as 2023, 2024, or 2025.`;
 
       if (tool === "youtube") {
-        prompt = `Create a YouTube SEO package for this topic: ${topic}.
+        prompt = `${baseInstruction}
+
+Create an evergreen YouTube SEO package for this topic: ${topic}.
 
 Return:
 1. Three engaging YouTube titles
@@ -139,7 +160,9 @@ Return:
       }
 
       if (tool === "blog") {
-        prompt = `Write an SEO-optimized blog post about this topic: ${topic}.
+        prompt = `${baseInstruction}
+
+Write an SEO-optimized blog post about this topic: ${topic}.
 
 Return:
 1. A strong blog title
@@ -150,7 +173,9 @@ Return:
       }
 
       if (tool === "gmb") {
-        prompt = `Create a Google Business Profile post for this business topic: ${topic}.
+        prompt = `${baseInstruction}
+
+Create a Google Business Profile post for this business topic: ${topic}.
 
 Return:
 1. A strong attention-grabbing headline
@@ -160,7 +185,9 @@ Return:
       }
 
       if (tool === "social") {
-        prompt = `Create social media marketing content for this topic: ${topic}.
+        prompt = `${baseInstruction}
+
+Create social media marketing content for this topic: ${topic}.
 
 Return:
 1. 3 engaging social media captions
@@ -170,7 +197,9 @@ Return:
       }
 
       if (tool === "keywords") {
-        prompt = `Generate local SEO keyword ideas for this topic: ${topic}.
+        prompt = `${baseInstruction}
+
+Generate local SEO keyword ideas for this topic: ${topic}.
 
 Return:
 1. 20 local SEO keywords
@@ -180,6 +209,7 @@ Return:
 
       results.style.display = "block";
       results.innerHTML = "Generating...";
+      copyBtn.style.display = "none";
 
       try {
         const response = await fetch("/api/generate", {
@@ -200,9 +230,28 @@ Return:
           data.content ||
           JSON.stringify(data, null, 2);
 
+        copyBtn.style.display = "inline-block";
       } catch (error) {
         results.innerHTML = "Error: " + error.message;
+        copyBtn.style.display = "none";
       }
+    }
+
+    function copyResults() {
+      const text = document.getElementById("results").innerText;
+      const btn = document.getElementById("copyBtn");
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerText = "Copied!";
+        setTimeout(() => {
+          btn.innerText = "Copy Results";
+        }, 2000);
+      }).catch(() => {
+        btn.innerText = "Copy Failed";
+        setTimeout(() => {
+          btn.innerText = "Copy Results";
+        }, 2000);
+      });
     }
   </script>
 </body>
