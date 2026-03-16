@@ -79,6 +79,25 @@
       background: #1e293b;
     }
 
+    .upgrade-btn {
+      display: inline-block;
+      margin-top: 18px;
+      margin-left: 10px;
+      padding: 12px 20px;
+      background: linear-gradient(90deg, #0f172a, #1e3a8a);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .upgrade-btn:hover {
+      opacity: 0.92;
+    }
+
     .results {
       margin-top: 24px;
       background: #f1f5f9;
@@ -93,6 +112,12 @@
       color: #64748b;
       font-size: 14px;
       margin-top: 10px;
+    }
+
+    .upsell-note {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #475569;
     }
   </style>
 </head>
@@ -121,6 +146,19 @@
     <button id="copyBtn" class="secondary-btn" onclick="copyResults()" style="display:none;">
       Copy Results
     </button>
+
+    <a
+      class="upgrade-btn"
+      href="https://www.gohighlevel.com/?fp_ref=xow29"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Upgrade to Advanced CRM + Automation
+    </a>
+
+    <div class="upsell-note">
+      Want the full system behind these tools? Explore the advanced CRM, automation, and marketing platform.
+    </div>
 
     <div class="muted">This tool sends your prompt to your secure AI endpoint.</div>
 
@@ -208,7 +246,7 @@ Return:
       }
 
       results.style.display = "block";
-      results.innerHTML = "Generating...";
+      results.innerHTML = "⚡ TSB AI is generating optimized marketing content for you. This may take a few seconds...";
       copyBtn.style.display = "none";
 
       try {
