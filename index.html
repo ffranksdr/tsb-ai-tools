@@ -262,7 +262,10 @@ Return:
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            prompt: prompt
+  prompt: prompt,
+  tool: tool,
+  topic: topic,
+  source: "tsb_ai_toolkit"
           })
         });
 
