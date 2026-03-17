@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TSB AI Marketing Tools</title>
+  <title>TSB AI Marketing Toolkit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -124,18 +124,21 @@
 <body>
   <div class="card">
     <h1>TSB AI Marketing Toolkit</h1>
-    <p>Create marketing content using your TSB AI server.</p>
+    <p>
+      Create AI-powered marketing content, visibility assets, and customer
+      engagement materials in seconds.
+    </p>
 
-    <label for="tool">Select Tool</label>
+    <label for="tool">Select Content Type</label>
     <select id="tool">
-      <option value="youtube">YouTube SEO Generator</option>
-      <option value="blog">Blog Post Generator</option>
-      <option value="gmb">Google Business Profile Post Generator</option>
-      <option value="social">Social Media Caption Generator</option>
-      <option value="keywords">Local SEO Keyword Generator</option>
+      <option value="youtube">YouTube SEO Content</option>
+      <option value="blog">Blog Post Content</option>
+      <option value="gmb">Google Business Profile Posts</option>
+      <option value="social">Social Media Posts</option>
+      <option value="keywords">Local SEO Content</option>
     </select>
 
-    <label for="topic">Topic</label>
+    <label for="topic">Topic or Business Prompt</label>
     <input
       id="topic"
       type="text"
@@ -157,10 +160,13 @@
     </a>
 
     <div class="upsell-note">
-      Want the full system behind these tools? Explore the advanced CRM, automation, and marketing platform.
+      Want the full system behind these tools? Explore the advanced CRM,
+      automation, and marketing platform.
     </div>
 
-    <div class="muted">This tool sends your prompt to your secure AI endpoint.</div>
+    <div class="muted">
+      This tool sends your prompt to your secure AI endpoint.
+    </div>
 
     <div id="results" class="results" style="display:none;"></div>
   </div>
@@ -237,7 +243,7 @@ Return:
       if (tool === "keywords") {
         prompt = `${baseInstruction}
 
-Generate local SEO keyword ideas for this topic: ${topic}.
+Generate local SEO content ideas and keyword assets for this topic: ${topic}.
 
 Return:
 1. 20 local SEO keywords
