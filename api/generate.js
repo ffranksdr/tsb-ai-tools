@@ -68,9 +68,10 @@ try {
 
     const data = await response.json();
 
-    const result =
-      data?.output?.[0]?.content?.[0]?.text ||
-      JSON.stringify(data, null, 2);
+return res.status(200).json({
+  success: true,
+  result: data.output?.[0]?.content?.[0]?.text || "No response generated"
+});
 
     return res.status(200).json({
       success: true,
