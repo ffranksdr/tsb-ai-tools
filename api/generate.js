@@ -19,6 +19,24 @@ export default async function handler(req, res) {
       email
     });
 
+    // Send toolkit usage to GoHighLevel webhook
+try {
+  await fetch("https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/0b84420d-9a4a-437b-a8a9-f3fb14b19fd0", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email,
+      tool,
+      topic,
+      source
+    })
+  });
+} catch (webhookError) {
+  console.error("GHL Webhook Error:", webhookError);
+}
+
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
     }
