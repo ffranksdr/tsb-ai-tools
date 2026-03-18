@@ -4,7 +4,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, tool, topic, source, email } = req.body;
+    const body = req.body || {};
+
+    const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
+    const tool = typeof body.tool === "string" ? body.tool.trim() : "";
+    const topic = typeof body.topic === "string" ? body.topic.trim() : "";
+    const source = typeof body.source === "string" ? body.source.trim() : "";
+    const email = typeof body.email === "string" ? body.email.trim() : "";
 
     console.log("TSB TOOL USAGE:", {
       tool,
@@ -21,7 +27,7 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: "gpt-4.1-mini",
@@ -32,31 +38,26 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("OpenAI API Error:", errorText);
+
       return res.status(500).json({
         error: "OpenAI request failed",
         details: errorText
       });
     }
 
-    const text = await response.text();
+    const data = await response.json();
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (err) {
-      console.error("Raw API response:", text);
-      return res.status(500).json({
-        error: "Invalid JSON from OpenAI",
-        raw: text
-      });
-    }
+    const result =
+      data?.output?.[0]?.content?.[0]?.text ||
+      JSON.stringify(data, null, 2);
 
     return res.status(200).json({
       success: true,
-      result: data.output?.[0]?.content?.[0]?.text || JSON.stringify(data, null, 2)
+      result
     });
-
   } catch (error) {
+    console.error("API Route Error:", error);
+
     return res.status(500).json({
       error: "AI generation failed",
       details: error.message
