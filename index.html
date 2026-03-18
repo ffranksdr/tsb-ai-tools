@@ -139,12 +139,14 @@
     </select>
 
     <label for="email">Email</label>
-<input
-  id="email"
-  type="email"
-  placeholder="Enter your email"
-  value="marketinginfodoc@gmail.com"
-/>
+    <input
+      id="email"
+      type="email"
+      placeholder="Enter your email"
+      value="marketinginfodoc@gmail.com"
+    />
+
+    <label for="topic">Topic</label>
     <input
       id="topic"
       type="text"
@@ -187,7 +189,7 @@
 
       if (!topic) {
         results.style.display = "block";
-        results.innerHTML = "Please enter a topic first.";
+        results.textContent = "Please enter a topic first.";
         copyBtn.style.display = "none";
         return;
       }
@@ -208,9 +210,7 @@ Return:
 1. Three engaging YouTube titles
 2. One SEO-optimized video description
 3. Ten YouTube tags in a comma-separated list`;
-      }
-
-      if (tool === "blog") {
+      } else if (tool === "blog") {
         prompt = `${baseInstruction}
 
 Write an SEO-optimized blog post about this topic: ${topic}.
@@ -221,9 +221,7 @@ Return:
 3. Clear section headings
 4. Helpful body content
 5. A persuasive call to action`;
-      }
-
-      if (tool === "gmb") {
+      } else if (tool === "gmb") {
         prompt = `${baseInstruction}
 
 Create a Google Business Profile post for this business topic: ${topic}.
@@ -233,9 +231,7 @@ Return:
 2. A 100-150 word Google Business Profile post
 3. A call-to-action encouraging customers to contact or visit
 4. 3 relevant hashtags`;
-      }
-
-      if (tool === "social") {
+      } else if (tool === "social") {
         prompt = `${baseInstruction}
 
 Create social media marketing content for this topic: ${topic}.
@@ -245,9 +241,7 @@ Return:
 2. 1 short promotional version
 3. 5 relevant hashtags
 4. A clear call-to-action`;
-      }
-
-      if (tool === "keywords") {
+      } else if (tool === "keywords") {
         prompt = `${baseInstruction}
 
 Generate local SEO content ideas and keyword assets for this topic: ${topic}.
@@ -259,8 +253,16 @@ Return:
       }
 
       results.style.display = "block";
-      results.innerHTML = "⚡ TSB AI is generating optimized marketing content for you. This may take a few seconds...";
+      results.textContent = "⚡ TSB AI is generating optimized marketing content for you. This may take a few seconds...";
       copyBtn.style.display = "none";
+
+      console.log("Sending payload:", {
+        prompt,
+        tool,
+        topic,
+        source: "tsb_ai_toolkit",
+        email
+      });
 
       try {
         const response = await fetch("/api/generate", {
@@ -269,25 +271,28 @@ Return:
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-  prompt: prompt,
-  tool: tool,
-  topic: topic,
-  source: "tsb_ai_toolkit",
-  email: email
+            prompt,
+            tool,
+            topic,
+            source: "tsb_ai_toolkit",
+            email
           })
         });
 
         const data = await response.json();
 
-        results.innerHTML =
-          data.result?.content ||
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed");
+        }
+
+        results.textContent =
           data.result ||
           data.content ||
           JSON.stringify(data, null, 2);
 
         copyBtn.style.display = "inline-block";
       } catch (error) {
-        results.innerHTML = "Error: " + error.message;
+        results.textContent = "Error: " + error.message;
         copyBtn.style.display = "none";
       }
     }
@@ -311,4 +316,3 @@ Return:
   </script>
 </body>
 </html>
-
