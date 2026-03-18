@@ -32,13 +32,13 @@ export default async function handler(req, res) {
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            contact: {
-              email: email
-            },
-            tool: tool,
-            topic: topic,
-            source: source
+         body: JSON.stringify({
+  email: email,
+  tool: tool,
+  topic: topic,
+  source: source,
+  trigger: "tsb_toolkit"
+})
           })
         }
       );
