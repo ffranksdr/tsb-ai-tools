@@ -19,29 +19,31 @@ export default async function handler(req, res) {
       email
     });
 
-    // Send toolkit usage to GoHighLevel webhook
-try {
-  await fetch("https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/0b84420d-9a4a-437b-a8a9-f3fb14b19fd0", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-   body: JSON.stringify({
-  contact: {
-    email: email
-  },
-  tool: tool,
-  topic: topic,
-  source: source
-})
-    })
-  });
-} catch (webhookError) {
-  console.error("GHL Webhook Error:", webhookError);
-}
-
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    // Send toolkit usage to GoHighLevel webhook
+    try {
+      await fetch(
+        "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/0b84420d-9a4a-437b-a8a9-f3fb14b19fd0",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            contact: {
+              email: email
+            },
+            tool: tool,
+            topic: topic,
+            source: source
+          })
+        }
+      );
+    } catch (webhookError) {
+      console.error("GHL Webhook Error:", webhookError);
     }
 
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -68,14 +70,9 @@ try {
 
     const data = await response.json();
 
-return res.status(200).json({
-  success: true,
-  result: data.output?.[0]?.content?.[0]?.text || "No response generated"
-});
-
     return res.status(200).json({
       success: true,
-      result
+      result: data?.output?.[0]?.content?.[0]?.text || "No response generated"
     });
   } catch (error) {
     console.error("API Route Error:", error);
