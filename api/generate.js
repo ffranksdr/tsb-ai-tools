@@ -26,11 +26,14 @@ try {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      email,
-      tool,
-      topic,
-      source
+   body: JSON.stringify({
+  contact: {
+    email: email
+  },
+  tool: tool,
+  topic: topic,
+  source: source
+})
     })
   });
 } catch (webhookError) {
