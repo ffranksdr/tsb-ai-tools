@@ -26,7 +26,8 @@ export default async function handler(req, res) {
     // Send toolkit usage to GoHighLevel webhook
     try {
       await fetch(
-        "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/c433cdc1-7138-4c49-b36c-210865cdb95c",
+        "await fetch(
+  "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/6a5ea724-0b14-4e65-8212-979d6ad8...",
         {
           method: "POST",
           headers: {
