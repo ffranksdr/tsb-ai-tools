@@ -6,13 +6,14 @@ export default async function handler(req, res) {
 
   try {
 
-    const { prompt, tool, topic, source } = req.body;
+    const { prompt, tool, topic, source, email } = req.body;
 
-console.log("TSB TOOL USAGE:", {
-  tool,
-  topic,
-  source
-});
+    console.log("TSB TOOL USAGE:", {
+      tool,
+      topic,
+      source,
+      email
+    });
 
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
