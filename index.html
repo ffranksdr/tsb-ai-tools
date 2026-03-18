@@ -188,6 +188,21 @@
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
 
+      if (!email) {
+  results.style.display = "block";
+  results.textContent = "Please enter your email before generating content.";
+  copyBtn.style.display = "none";
+  return;
+}
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+  results.style.display = "block";
+  results.textContent = "Please enter a valid email address.";
+  copyBtn.style.display = "none";
+  return;
+}
+
       if (!topic) {
         results.style.display = "block";
         results.textContent = "Please enter a topic first.";
