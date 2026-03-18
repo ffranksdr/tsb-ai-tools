@@ -138,7 +138,13 @@
       <option value="keywords">Local SEO Content</option>
     </select>
 
-    <label for="topic">Topic or Business Prompt</label>
+    <label for="email">Email</label>
+<input
+  id="email"
+  type="email"
+  placeholder="Enter your email"
+  value="marketinginfodoc@gmail.com"
+/>
     <input
       id="topic"
       type="text"
@@ -174,6 +180,7 @@
   <script>
     async function generate() {
       const tool = document.getElementById("tool").value;
+      const email = document.getElementById("email").value.trim();
       const topic = document.getElementById("topic").value.trim();
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
