@@ -6,24 +6,48 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
-    const tool = typeof body.tool === "string" ? body.tool.trim() : "";
-    const topic = typeof body.topic === "string" ? body.topic.trim() : "";
-    const source = typeof body.source === "string" ? body.source.trim() : "";
-    const email = typeof body.email === "string" ? body.email.trim() : "";
+    const prompt =
+      typeof body.prompt === "string" ? body.prompt.trim() : "";
+    const businessName =
+      typeof body.businessName === "string" ? body.businessName.trim() : "";
+    const email =
+      typeof body.email === "string" ? body.email.trim() : "";
+    const city =
+      typeof body.city === "string" ? body.city.trim() : "";
+    const topic =
+      typeof body.topic === "string" ? body.topic.trim() : "";
+    const source =
+      typeof body.source === "string" ? body.source.trim() : "";
 
-    console.log("TSB TOOL USAGE:", {
-      tool,
+    console.log("TSB AI VISIBILITY LEAD:", {
+      businessName,
+      email,
+      city,
       topic,
-      source,
-      email
+      source
     });
 
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
     }
 
-    // Send toolkit usage to GoHighLevel webhook
+    if (!businessName) {
+      return res.status(400).json({ error: "Business name is required" });
+    }
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    if (!city) {
+      return res.status(400).json({ error: "City is required" });
+    }
+
+    if (!topic) {
+      return res.status(400).json({ error: "Business description is required" });
+    }
+
+    // Send lead data to GoHighLevel webhook
     try {
       await fetch(
         "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/db14b4fa-f291-4b9f-ac35-c48dd2391613",
@@ -33,11 +57,12 @@ export default async function handler(req, res) {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            email: email,
-            tool: tool,
-            topic: topic,
-            source: source,
-            trigger: "tsb_toolkit"
+            businessName,
+            email,
+            city,
+            topic,
+            source,
+            trigger: "tsb_ai_visibility_lead_engine"
           })
         }
       );
@@ -69,9 +94,12 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    const result =
+      data?.output?.[0]?.content?.[0]?.text || "No response generated";
+
     return res.status(200).json({
       success: true,
-      result: data?.output?.[0]?.content?.[0]?.text || "No response generated"
+      result
     });
   } catch (error) {
     console.error("API Route Error:", error);
