@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TSB AI Marketing Toolkit</title>
+  <title>TSB AI Visibility Lead Engine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -79,25 +79,6 @@
       background: #1e293b;
     }
 
-    .upgrade-btn {
-      display: inline-block;
-      margin-top: 18px;
-      margin-left: 10px;
-      padding: 12px 20px;
-      background: linear-gradient(90deg, #0f172a, #1e3a8a);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .upgrade-btn:hover {
-      opacity: 0.92;
-    }
-
     .results {
       margin-top: 24px;
       background: #f1f5f9;
@@ -114,8 +95,8 @@
       margin-top: 10px;
     }
 
-    .upsell-note {
-      margin-top: 12px;
+    .helper-text {
+      margin-top: 14px;
       font-size: 14px;
       color: #475569;
     }
@@ -123,58 +104,57 @@
 </head>
 <body>
   <div class="card">
-    <h1>TSB AI Marketing Toolkit</h1>
+    <h1>See How Visible Your Business Is in AI Search</h1>
     <p>
-      Create AI-powered marketing content, visibility assets, and customer
-      engagement materials in seconds.
+      Get a quick AI Visibility Snapshot for your business and discover where you
+      may be losing attention, traffic, and leads.
     </p>
 
-    <label for="tool">Select Content Type</label>
-    <select id="tool">
-      <option value="youtube">YouTube SEO Content</option>
-      <option value="blog">Blog Post Content</option>
-      <option value="gmb">Google Business Profile Posts</option>
-      <option value="social">Social Media Posts</option>
-      <option value="keywords">Local SEO Content</option>
-    </select>
+    <label for="businessName">Business Name</label>
+    <input
+      id="businessName"
+      type="text"
+      placeholder="Ex: Smith Family Dental"
+      value=""
+      required
+    />
 
-    <label for="email">Email</label>
-<input
-  id="email"
-  type="email"
-  placeholder="Enter your email"
-  value=""
-  required
-/>
+    <label for="email">Email Address</label>
+    <input
+      id="email"
+      type="email"
+      placeholder="Ex: name@business.com"
+      value=""
+      required
+    />
 
-    <label for="topic">Topic</label>
+    <label for="city">City</label>
+    <input
+      id="city"
+      type="text"
+      placeholder="Ex: Salt Lake City"
+      value=""
+      required
+    />
+
+    <label for="topic">What does your business do?</label>
     <input
       id="topic"
       type="text"
-      placeholder="Example: Salt Lake City roofing tips for homeowners"
+      placeholder="Ex: Local roofing company helping homeowners with roof repair and replacement"
     />
 
-    <button onclick="generate()">Generate Content</button>
+    <button onclick="generate()">Get My AI Visibility Snapshot</button>
     <button id="copyBtn" class="secondary-btn" onclick="copyResults()" style="display:none;">
       Copy Results
     </button>
 
-    <a
-      class="upgrade-btn"
-      href="https://www.gohighlevel.com/?fp_ref=xow29"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Upgrade to Advanced CRM + Automation
-    </a>
-
-    <div class="upsell-note">
-      Want the full system behind these tools? Explore the advanced CRM,
-      automation, and marketing platform.
+    <div class="helper-text">
+      No complicated setup. Just a quick visibility snapshot and next-step recommendations.
     </div>
 
     <div class="muted">
-      This tool sends your prompt to your secure AI endpoint.
+      This tool sends your request to your secure AI endpoint.
     </div>
 
     <div id="results" class="results" style="display:none;"></div>
@@ -182,102 +162,79 @@
 
   <script>
     async function generate() {
-      const tool = document.getElementById("tool").value;
+      const businessName = document.getElementById("businessName").value.trim();
       const email = document.getElementById("email").value.trim();
+      const city = document.getElementById("city").value.trim();
       const topic = document.getElementById("topic").value.trim();
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
 
-      if (!email) {
-  results.style.display = "block";
-  results.textContent = "Please enter your email before generating content.";
-  copyBtn.style.display = "none";
-  return;
-}
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-if (!emailPattern.test(email)) {
-  results.style.display = "block";
-  results.textContent = "Please enter a valid email address.";
-  copyBtn.style.display = "none";
-  return;
-}
-
-      if (!topic) {
+      if (!businessName) {
         results.style.display = "block";
-        results.textContent = "Please enter a topic first.";
+        results.textContent = "Please enter your business name.";
         copyBtn.style.display = "none";
         return;
       }
 
-      let prompt = "";
-      const baseInstruction = `You are an expert digital marketing strategist helping small local businesses grow online.
-
-Write clear, practical marketing content that a small business owner can immediately use.
-Use current marketing best practices and evergreen SEO principles.
-Do not include specific years such as 2023, 2024, or 2025.`;
-
-      if (tool === "youtube") {
-        prompt = `${baseInstruction}
-
-Create an evergreen YouTube SEO package for this topic: ${topic}.
-
-Return:
-1. Three engaging YouTube titles
-2. One SEO-optimized video description
-3. Ten YouTube tags in a comma-separated list`;
-      } else if (tool === "blog") {
-        prompt = `${baseInstruction}
-
-Write an SEO-optimized blog post about this topic: ${topic}.
-
-Return:
-1. A strong blog title
-2. An engaging introduction
-3. Clear section headings
-4. Helpful body content
-5. A persuasive call to action`;
-      } else if (tool === "gmb") {
-        prompt = `${baseInstruction}
-
-Create a Google Business Profile post for this business topic: ${topic}.
-
-Return:
-1. A strong attention-grabbing headline
-2. A 100-150 word Google Business Profile post
-3. A call-to-action encouraging customers to contact or visit
-4. 3 relevant hashtags`;
-      } else if (tool === "social") {
-        prompt = `${baseInstruction}
-
-Create social media marketing content for this topic: ${topic}.
-
-Return:
-1. 3 engaging social media captions
-2. 1 short promotional version
-3. 5 relevant hashtags
-4. A clear call-to-action`;
-      } else if (tool === "keywords") {
-        prompt = `${baseInstruction}
-
-Generate local SEO content ideas and keyword assets for this topic: ${topic}.
-
-Return:
-1. 20 local SEO keywords
-2. 10 long-tail keyword phrases
-3. 5 content topic ideas based on those keywords`;
+      if (!email) {
+        results.style.display = "block";
+        results.textContent = "Please enter your email address.";
+        copyBtn.style.display = "none";
+        return;
       }
 
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailPattern.test(email)) {
+        results.style.display = "block";
+        results.textContent = "Please enter a valid email address.";
+        copyBtn.style.display = "none";
+        return;
+      }
+
+      if (!city) {
+        results.style.display = "block";
+        results.textContent = "Please enter your city.";
+        copyBtn.style.display = "none";
+        return;
+      }
+
+      if (!topic) {
+        results.style.display = "block";
+        results.textContent = "Please briefly describe what your business does.";
+        copyBtn.style.display = "none";
+        return;
+      }
+
+      const prompt = `You are an AI visibility strategist helping local businesses understand how well they are positioned to be discovered in AI search and modern online discovery.
+
+Business Name: ${businessName}
+City: ${city}
+Business Description: ${topic}
+
+Create a simple AI Visibility Snapshot.
+
+Return:
+1. A short summary of the business
+2. 3 likely visibility strengths
+3. 3 likely visibility gaps
+4. 3 recommended next steps
+5. A short strategy-session invitation at the end
+
+Keep it practical, clear, and easy for a small business owner to understand.
+Do not use heavy technical jargon.`;
+
       results.style.display = "block";
-      results.textContent = "⚡ TSB AI is generating optimized marketing content for you. This may take a few seconds...";
+      results.textContent = "Generating your AI Visibility Snapshot...";
       copyBtn.style.display = "none";
 
       console.log("Sending payload:", {
         prompt,
-        tool,
+        businessName,
+        email,
+        city,
         topic,
-        source: "tsb_ai_toolkit",
-        email
+        source: "tsb_ai_visibility_lead_engine"
       });
 
       try {
@@ -288,10 +245,11 @@ Return:
           },
           body: JSON.stringify({
             prompt,
-            tool,
+            businessName,
+            email,
+            city,
             topic,
-            source: "tsb_ai_toolkit",
-            email
+            source: "tsb_ai_visibility_lead_engine"
           })
         });
 
