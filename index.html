@@ -100,6 +100,41 @@
       font-size: 14px;
       color: #475569;
     }
+
+    .booking-cta {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+    }
+
+    .booking-cta h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    .booking-cta p {
+      margin: 0 0 16px;
+      color: #475569;
+    }
+
+    .booking-link {
+      display: inline-block;
+      padding: 14px 22px;
+      background: linear-gradient(90deg, #16a34a, #22c55e);
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .booking-link:hover {
+      opacity: 0.94;
+    }
   </style>
 </head>
 <body>
@@ -158,29 +193,21 @@
     </div>
 
     <div id="results" class="results" style="display:none;"></div>
-    <div id="bookingCTA" style="display:none; margin-top:20px; text-align:center;">
-  <h3 style="margin-bottom:10px;">Want help improving your visibility?</h3>
-  <p style="margin-bottom:16px; color:#475569;">
-    Book a free AI Visibility Strategy Session and we’ll walk through your results together.
-  </p>
 
-  <a
-    href="https://api.leadconnectorhq.com/widget/booking/ibDxClolinwWasEwdlAd"
-    target="_blank"
-    rel="noopener noreferrer"
-    style="
-      display:inline-block;
-      padding:14px 22px;
-      background: linear-gradient(90deg, #16a34a, #22c55e);
-      color:#fff;
-      border-radius:10px;
-      font-weight:700;
-      text-decoration:none;
-    "
-  >
-    Book Your AI Visibility Strategy Session
-  </a>
-</div>
+    <div id="bookingCTA" class="booking-cta">
+      <h3>Want help improving your visibility?</h3>
+      <p>
+        Book a free AI Visibility Strategy Session and we’ll walk through your results together.
+      </p>
+      <a
+        class="booking-link"
+        href="https://api.leadconnectorhq.com/widget/booking/ibDxClolinwWasEwdlAd"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Book Your AI Visibility Strategy Session
+      </a>
+    </div>
   </div>
 
   <script>
@@ -191,6 +218,9 @@
       const topic = document.getElementById("topic").value.trim();
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
+      const bookingCTA = document.getElementById("bookingCTA");
+
+      bookingCTA.style.display = "none";
 
       if (!businessName) {
         results.style.display = "block";
@@ -250,6 +280,7 @@ Do not use heavy technical jargon.`;
       results.style.display = "block";
       results.textContent = "Generating your AI Visibility Snapshot...";
       copyBtn.style.display = "none";
+      bookingCTA.style.display = "none";
 
       console.log("Sending payload:", {
         prompt,
@@ -288,9 +319,11 @@ Do not use heavy technical jargon.`;
           JSON.stringify(data, null, 2);
 
         copyBtn.style.display = "inline-block";
+        bookingCTA.style.display = "block";
       } catch (error) {
         results.textContent = "Error: " + error.message;
         copyBtn.style.display = "none";
+        bookingCTA.style.display = "none";
       }
     }
 
