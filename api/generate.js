@@ -19,12 +19,15 @@ export default async function handler(req, res) {
     const source =
       typeof body.source === "string" ? body.source.trim() : "";
 
+    const timestamp = new Date().toISOString();
+
     console.log("TSB AI VISIBILITY LEAD:", {
       businessName,
       email,
       city,
       topic,
-      source
+      source,
+      timestamp
     });
 
     if (!prompt) {
@@ -47,7 +50,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Business description is required" });
     }
 
-    // Send lead data to GoHighLevel webhook
+    // 1) Send lead intake data to GoHighLevel webhook
     try {
       await fetch(
         "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/db14b4fa-f291-4b9f-ac35-c48dd2391613",
@@ -61,13 +64,15 @@ export default async function handler(req, res) {
             email,
             city,
             topic,
+            businessDescription: topic,
             source,
+            submitted_at: timestamp,
             trigger: "tsb_ai_visibility_lead_engine"
           })
         }
       );
     } catch (webhookError) {
-      console.error("GHL Webhook Error:", webhookError);
+      console.error("GHL Lead Webhook Error:", webhookError);
     }
 
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -95,7 +100,35 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     const result =
-      data?.output?.[0]?.content?.[0]?.text || "No response generated";
+      data?.output?.[0]?.content?.[0]?.text ||
+      data?.output_text ||
+      "No response generated";
+
+    // 2) Send AI result to GoHighLevel webhook after result is generated
+    try {
+      await fetch(
+        "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/db14b4fa-f291-4b9f-ac35-c48dd2391613",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            businessName,
+            email,
+            city,
+            topic,
+            businessDescription: topic,
+            source,
+            ai_result: result,
+            submitted_at: timestamp,
+            trigger: "tsb_ai_visibility_lead_engine_result"
+          })
+        }
+      );
+    } catch (webhookError) {
+      console.error("GHL Result Webhook Error:", webhookError);
+    }
 
     return res.status(200).json({
       success: true,
