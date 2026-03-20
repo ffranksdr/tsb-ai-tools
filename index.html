@@ -111,6 +111,13 @@
       box-shadow: 0 14px 28px rgba(22, 163, 74, 0.28);
     }
 
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .secondary-btn {
       background: #0f172a;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
@@ -270,10 +277,12 @@
       id="topic"
       type="text"
       placeholder="Ex: Local roofing company helping homeowners with roof repair and replacement"
+      value=""
+      required
     />
 
     <div class="button-row">
-      <button onclick="generate()">Get My AI Visibility Snapshot</button>
+      <button id="generateBtn" onclick="generate()">Get My AI Visibility Snapshot</button>
       <button id="copyBtn" class="secondary-btn" onclick="copyResults()" style="display:none;">
         Copy Results
       </button>
@@ -318,6 +327,7 @@
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
       const bookingCTA = document.getElementById("bookingCTA");
+      const generateBtn = document.getElementById("generateBtn");
 
       bookingCTA.style.display = "none";
 
@@ -371,7 +381,7 @@ Return:
 2. 3 likely visibility strengths
 3. 3 likely visibility gaps
 4. 3 recommended next steps
-5. A short strategy-session invitation at the end
+5. End with a concise summary reinforcing what the business is missing and why it matters. Do not include a call-to-action or invitation.
 
 Keep it practical, clear, and easy for a small business owner to understand.
 Do not use heavy technical jargon.`;
@@ -380,6 +390,8 @@ Do not use heavy technical jargon.`;
       results.textContent = "Generating your AI Visibility Snapshot...";
       copyBtn.style.display = "none";
       bookingCTA.style.display = "none";
+      generateBtn.disabled = true;
+      generateBtn.textContent = "Generating...";
 
       console.log("Sending payload:", {
         prompt,
@@ -424,6 +436,9 @@ Do not use heavy technical jargon.`;
         results.textContent = "Error: " + error.message;
         copyBtn.style.display = "none";
         bookingCTA.style.display = "none";
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = "Get My AI Visibility Snapshot";
       }
     }
 
