@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TSB AI Visibility Lead Engine</title>
+  <title>Direct-Results Social Media Post Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -237,12 +237,13 @@
 </head>
 <body>
   <div class="card">
-    <div class="eyebrow">Free AI Visibility Snapshot</div>
+    <div class="eyebrow">Direct-Results Social Media Toolkit</div>
 
-    <h1>See How Visible Your Business Is in AI Search</h1>
+    <h1>Create Social Media Posts for Your Business in Seconds</h1>
     <p class="intro">
-      Get a fast AI Visibility Snapshot for your business and uncover where you may
-      be missing attention, traffic, and leads across AI search and Google discovery.
+      Generate ready-to-use social media content for Facebook, Instagram, LinkedIn, X,
+      Google Business Profile, and more. Just enter your business details, choose a platform,
+      and get content you can post right away.
     </p>
 
     <label for="businessName">Business Name</label>
@@ -272,24 +273,43 @@
       required
     />
 
-    <label for="topic">What does your business do?</label>
+    <label for="platform">Choose a Social Media Platform</label>
+    <select id="platform" required>
+      <option value="">Select a platform</option>
+      <option value="Facebook">Facebook</option>
+      <option value="Instagram">Instagram</option>
+      <option value="LinkedIn">LinkedIn</option>
+      <option value="X">X</option>
+      <option value="Google Business Profile">Google Business Profile</option>
+      <option value="Facebook and Instagram">Facebook and Instagram</option>
+      <option value="LinkedIn and Facebook">LinkedIn and Facebook</option>
+      <option value="All Platforms">All Platforms</option>
+    </select>
+
+    <label for="topic">What would you like to promote?</label>
     <input
       id="topic"
       type="text"
-      placeholder="Ex: Local roofing company helping homeowners with roof repair and replacement"
+      placeholder="Ex: Spring special, new service, customer testimonial, local event, business tip"
       value=""
       required
     />
 
+    <label for="details">Extra Details or Offer</label>
+    <textarea
+      id="details"
+      placeholder="Ex: 20% off this month, family-owned, serving Salt Lake City, free estimates, now accepting new clients"
+    ></textarea>
+
     <div class="button-row">
-      <button id="generateBtn" onclick="generate()">Get My AI Visibility Snapshot</button>
+      <button id="generateBtn" onclick="generate()">Generate My Social Media Post</button>
       <button id="copyBtn" class="secondary-btn" onclick="copyResults()" style="display:none;">
         Copy Results
       </button>
     </div>
 
     <div class="helper-text">
-      No complicated setup. Just a quick visibility snapshot and practical next-step recommendations.
+      Fast, simple, and designed for local businesses that want to stay active online without spending hours writing.
     </div>
 
     <div class="muted">
@@ -299,21 +319,21 @@
     <div id="results" class="results"></div>
 
     <div id="bookingCTA" class="booking-cta">
-      <h3>See exactly how to fix your visibility gaps</h3>
+      <h3>Want more marketing help beyond one post?</h3>
       <p>
-        In your free strategy session, we’ll break down what’s working, what may be costing you leads,
-        and the exact steps to improve your visibility in AI search and Google.
+        Get access to the full Direct-Results social media toolkit and create more content
+        for multiple platforms with less effort.
       </p>
       <a
         class="booking-link"
-        href="https://api.leadconnectorhq.com/widget/booking/ibDxClolinwWasEwdlAd"
+        href="https://get.directresultsut.com/"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Book My Free Visibility Strategy Session
+        Explore the Full Toolkit
       </a>
       <div class="trust-note">
-        This is a strategy session, not a high-pressure sales call.
+        Includes tools designed to help local businesses stay visible and active online.
       </div>
     </div>
   </div>
@@ -323,7 +343,9 @@
       const businessName = document.getElementById("businessName").value.trim();
       const email = document.getElementById("email").value.trim();
       const city = document.getElementById("city").value.trim();
+      const platform = document.getElementById("platform").value.trim();
       const topic = document.getElementById("topic").value.trim();
+      const details = document.getElementById("details").value.trim();
       const results = document.getElementById("results");
       const copyBtn = document.getElementById("copyBtn");
       const bookingCTA = document.getElementById("bookingCTA");
@@ -361,45 +383,63 @@
         return;
       }
 
-      if (!topic) {
+      if (!platform) {
         results.style.display = "block";
-        results.textContent = "Please briefly describe what your business does.";
+        results.textContent = "Please choose a social media platform.";
         copyBtn.style.display = "none";
         return;
       }
 
-      const prompt = `You are an AI visibility strategist helping local businesses understand how well they are positioned to be discovered in AI search and modern online discovery.
+      if (!topic) {
+        results.style.display = "block";
+        results.textContent = "Please enter what you would like to promote.";
+        copyBtn.style.display = "none";
+        return;
+      }
+
+      const prompt = `You are a social media marketing assistant for local businesses.
 
 Business Name: ${businessName}
 City: ${city}
-Business Description: ${topic}
+Platform: ${platform}
+Promotion Topic: ${topic}
+Extra Details: ${details || "None provided"}
 
-Create a simple AI Visibility Snapshot.
+Create social media content for this business.
 
 Return:
-1. A short summary of the business
-2. 3 likely visibility strengths
-3. 3 likely visibility gaps
-4. 3 recommended next steps
-5. End with a concise summary reinforcing what the business is missing and why it matters. Do not include a call-to-action or invitation.
+1. One primary social media post tailored for ${platform}
+2. One alternate version with a slightly different angle
+3. A short caption variation if appropriate
+4. 8 relevant hashtags
+5. A short call to action
 
-Keep it practical, clear, and easy for a small business owner to understand.
+Requirements:
+- Write for a local business audience
+- Keep the tone clear, engaging, and professional
+- Make the content practical and ready to post
+- Tailor the wording to ${platform}
+- If the platform is LinkedIn, make it more professional
+- If the platform is Instagram or Facebook, make it more conversational
+- If the platform is Google Business Profile, make it concise and local
+- If the platform is X, keep it punchy and shorter
+- If the platform is All Platforms, create a flexible version that can be adapted
 
-Format the response cleanly:
+Formatting:
 - Do NOT use markdown symbols like ** or *
-- Use clear section headings exactly like this:
-Business Summary:
-Strengths:
-Visibility Gaps:
-Recommended Next Steps:
-Summary:
-- Use bullet points with dashes (-)
-- Keep spacing clean and easy to read
+- Use these exact section headings:
+Primary Post:
+Alternate Post:
+Caption Variation:
+Hashtags:
+Call to Action:
+- Use clean spacing
+- Use dashes (-) for the hashtags line if needed
 
-Do not use heavy technical jargon.`;
+Do not mention AI. Do not mention that this was generated.`;
 
       results.style.display = "block";
-      results.textContent = "Generating your AI Visibility Snapshot...";
+      results.textContent = "Generating your social media content...";
       copyBtn.style.display = "none";
       bookingCTA.style.display = "none";
       generateBtn.disabled = true;
@@ -410,8 +450,10 @@ Do not use heavy technical jargon.`;
         businessName,
         email,
         city,
+        platform,
         topic,
-        source: "tsb_ai_visibility_lead_engine"
+        details,
+        source: "direct_results_social_media_toolkit"
       });
 
       try {
@@ -425,8 +467,10 @@ Do not use heavy technical jargon.`;
             businessName,
             email,
             city,
+            platform,
             topic,
-            source: "tsb_ai_visibility_lead_engine"
+            details,
+            source: "direct_results_social_media_toolkit"
           })
         });
 
@@ -450,7 +494,7 @@ Do not use heavy technical jargon.`;
         bookingCTA.style.display = "none";
       } finally {
         generateBtn.disabled = false;
-        generateBtn.textContent = "Get My AI Visibility Snapshot";
+        generateBtn.textContent = "Generate My Social Media Post";
       }
     }
 
