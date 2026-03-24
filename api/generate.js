@@ -10,14 +10,16 @@ export default async function handler(req, res) {
     const businessName = body.businessName || "";
     const email = body.email || "";
     const city = body.city || "";
+    const platform = body.platform || "";
     const topic = body.topic || "";
-    const source = body.source || "";
+    const details = body.details || "";
+    const source = body.source || "direct_results_social_media_toolkit";
 
-    if (!prompt || !businessName || !email || !city || !topic) {
+    if (!prompt || !businessName || !email || !city || !platform || !topic) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // 🔥 Call OpenAI FIRST (important)
+    // Call OpenAI first
     const aiResponse = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -41,7 +43,7 @@ export default async function handler(req, res) {
       data?.output?.[0]?.content?.[0]?.text ||
       "No response generated";
 
-    // 🔥 Send EVERYTHING to GHL (single webhook = cleaner + safer)
+    // Send the request + AI result to GoHighLevel
     try {
       await fetch(
         "https://services.leadconnectorhq.com/hooks/gxwpEp79etg6vPPoErAO/webhook-trigger/db14b4fa-f291-4b9f-ac35-c48dd2391613",
@@ -54,10 +56,12 @@ export default async function handler(req, res) {
             businessName,
             email,
             city,
+            platform,
             topic,
+            details,
             source,
             ai_result: result,
-            trigger: "tsb_ai_visibility_lead_engine"
+            trigger: "direct_results_social_media_post_generator"
           })
         }
       );
