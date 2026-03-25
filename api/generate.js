@@ -11,8 +11,8 @@ export default async function handler(req, res) {
     const city = body.city || "";
     const topic = body.topic || "";
     const platform = body.platform || "";
-    const extraDetails = body.extraDetails || "";
-    const source = body.source || "direct_results_social_media_tool";
+    const details = body.details || "";
+    const source = body.source || "direct_results_social_media_toolkit";
 
     if (!businessName || !email || !city || !topic || !platform) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -27,7 +27,7 @@ Business Name: ${businessName}
 City: ${city}
 Platform: ${platform}
 Topic to Promote: ${topic}
-Extra Details or Offer: ${extraDetails}
+Extra Details or Offer: ${details}
 
 Instructions:
 - Write specifically for ${platform}
@@ -90,7 +90,7 @@ Post 3:
             city,
             topic,
             platform,
-            extraDetails,
+            details,
             source,
             ai_result: result,
             trigger: "direct_results_social_media_generator"
